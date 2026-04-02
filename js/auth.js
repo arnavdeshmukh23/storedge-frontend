@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://storedge-backend.onrender.com";
 
 // 🔐 SIGNUP
 async function signup() {
