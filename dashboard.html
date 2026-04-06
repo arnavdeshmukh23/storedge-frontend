@@ -9,9 +9,9 @@
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap" rel="stylesheet"/>
   <style>
     :root{
-      --sky:#00AEEF; --sky-glow:rgba(0,174,239,0.4); --green:#00e5a0;
-      --bg:#06090f; --surface:#0c1219; --surface2:#111b26; --border:rgba(255,255,255,0.07);
-      --text:#dde6f0; --muted:rgba(221,230,240,0.42);
+      --sky:#00AEEF;--sky-glow:rgba(0,174,239,0.4);--green:#00e5a0;
+      --bg:#06090f;--surface:#0c1219;--surface2:#111b26;--border:rgba(255,255,255,0.07);
+      --text:#dde6f0;--muted:rgba(221,230,240,0.42);
       --font-display:'Clash Display','Syne',sans-serif;
       --font-body:'Plus Jakarta Sans',sans-serif;
     }
@@ -19,7 +19,7 @@
     body{background:var(--bg);color:var(--text);font-family:var(--font-body);height:100vh;display:flex;overflow:hidden;}
 
     /* ── SIDEBAR ── */
-    .sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:22px 14px;flex-shrink:0;}
+    .sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:22px 14px;flex-shrink:0;overflow-y:auto;}
     .logo{font-family:var(--font-display);font-weight:700;font-size:19px;background:linear-gradient(135deg,#fff,var(--sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent;padding:0 8px;margin-bottom:28px;cursor:pointer;}
     .nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s;user-select:none;}
     .nav-item:hover{background:rgba(255,255,255,0.04);color:var(--text);}
@@ -27,7 +27,7 @@
     .nav-item .ico{width:18px;text-align:center;font-size:14px;}
     .nav-section{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:0 10px;margin:16px 0 6px;}
 
-    .storage-box{margin-top:auto;background:rgba(0,174,239,0.07);border:1px solid rgba(0,174,239,0.18);border-radius:14px;padding:14px;}
+    .storage-box{margin-top:auto;flex-shrink:0;background:rgba(0,174,239,0.07);border:1px solid rgba(0,174,239,0.18);border-radius:14px;padding:14px;margin-top:16px;}
     .sto-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
     .sto-title{font-size:12px;font-weight:600;}
     .sto-badge{font-size:10px;font-weight:600;background:rgba(0,174,239,0.15);color:var(--sky);padding:2px 8px;border-radius:99px;}
@@ -39,7 +39,6 @@
 
     /* ── MAIN ── */
     .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-
     .topbar{border-bottom:1px solid var(--border);padding:14px 26px;display:flex;align-items:center;gap:12px;background:var(--surface);flex-shrink:0;}
     .search-wrap{flex:1;position:relative;}
     .search-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;}
@@ -62,34 +61,90 @@
     .stat-label{font-size:11px;font-weight:500;color:var(--muted);margin-top:3px;letter-spacing:0.04em;text-transform:uppercase;}
 
     /* upload zone */
-    .upload-zone{border:2px dashed rgba(0,174,239,0.22);border-radius:14px;padding:24px;text-align:center;margin-bottom:24px;cursor:pointer;transition:all 0.2s;background:rgba(0,174,239,0.03);}
+    .upload-zone{border:2px dashed rgba(0,174,239,0.22);border-radius:14px;padding:22px;text-align:center;margin-bottom:20px;cursor:pointer;transition:all 0.2s;background:rgba(0,174,239,0.03);}
     .upload-zone:hover,.upload-zone.drag{border-color:var(--sky);background:rgba(0,174,239,0.07);}
-    .upload-zone .big-ico{font-size:30px;margin-bottom:8px;}
+    .upload-zone .big-ico{font-size:28px;margin-bottom:6px;}
     .upload-zone p{font-size:14px;color:var(--muted);}
     .upload-zone strong{color:var(--sky);}
 
-    /* section header */
-    .sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    /* ── TOOLBAR (sort, view, bulk) ── */
+    .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+    .toolbar-left{display:flex;align-items:center;gap:8px;flex:1;}
+    .toolbar-right{display:flex;align-items:center;gap:6px;}
     .sec-title{font-family:var(--font-display);font-size:15px;font-weight:600;}
-    .view-label{font-size:12px;color:var(--muted);}
 
-    /* files grid */
+    .sort-select{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:var(--font-body);font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;outline:none;transition:border-color 0.2s;}
+    .sort-select:hover,.sort-select:focus{border-color:rgba(0,174,239,0.35);color:var(--text);}
+    /* Style the dropdown options */
+    .sort-select option{background:var(--surface2);color:var(--text);}
+
+    .view-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.2s;}
+    .view-btn.active,.view-btn:hover{background:rgba(0,174,239,0.1);border-color:rgba(0,174,239,0.3);color:var(--sky);}
+
+    .file-count{font-size:12px;color:var(--muted);}
+
+    /* bulk action bar */
+    .bulk-bar{display:none;align-items:center;gap:10px;padding:10px 14px;background:rgba(0,174,239,0.08);border:1px solid rgba(0,174,239,0.2);border-radius:12px;margin-bottom:14px;flex-wrap:wrap;}
+    .bulk-bar.show{display:flex;}
+    .bulk-count{font-size:13px;font-weight:600;color:var(--sky);}
+    .bulk-btn{padding:6px 14px;border-radius:8px;border:none;font-family:var(--font-body);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .bulk-btn.del{background:rgba(255,77,77,0.15);color:#ff6b6b;}
+    .bulk-btn.del:hover{background:rgba(255,77,77,0.3);}
+    .bulk-btn.move{background:rgba(255,165,0,0.12);color:#ffaa00;}
+    .bulk-btn.move:hover{background:rgba(255,165,0,0.25);}
+    .bulk-btn.cancel{background:rgba(255,255,255,0.06);color:var(--muted);}
+    .bulk-select-all{font-size:12px;color:var(--sky);cursor:pointer;font-weight:500;}
+
+    /* ── GRID VIEW ── */
     .files-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px;margin-bottom:24px;}
-    .file-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all 0.2s;position:relative;}
+    .file-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all 0.2s;position:relative;user-select:none;}
     .file-card:hover{border-color:rgba(0,174,239,0.3);background:rgba(0,174,239,0.05);transform:translateY(-2px);}
+    .file-card.selected{border-color:var(--sky);background:rgba(0,174,239,0.1);}
+    .file-card.selected::before{content:'✓';position:absolute;top:6px;left:8px;width:18px;height:18px;background:var(--sky);border-radius:50%;font-size:10px;font-weight:700;color:#06090f;display:flex;align-items:center;justify-content:center;line-height:18px;text-align:center;}
     .file-thumb{width:64px;height:64px;border-radius:8px;object-fit:cover;margin-bottom:2px;}
     .file-ico{font-size:40px;margin-bottom:2px;line-height:1;}
     .file-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;text-align:center;}
     .file-size{font-size:10px;color:var(--muted);}
-    .file-actions{position:absolute;top:6px;right:6px;display:none;gap:4px;}
+    .file-actions{position:absolute;top:6px;right:6px;display:none;gap:3px;flex-wrap:wrap;max-width:60px;}
     .file-card:hover .file-actions{display:flex;}
-    .fa-btn{width:24px;height:24px;border-radius:6px;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+    .fa-btn{width:22px;height:22px;border-radius:5px;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
     .fa-btn.preview{background:rgba(0,174,239,0.2);color:var(--sky);}
     .fa-btn.preview:hover{background:rgba(0,174,239,0.4);}
     .fa-btn.download{background:rgba(0,229,160,0.15);color:var(--green);}
     .fa-btn.download:hover{background:rgba(0,229,160,0.35);}
+    .fa-btn.rename{background:rgba(255,255,255,0.08);color:var(--muted);}
+    .fa-btn.rename:hover{background:rgba(255,255,255,0.15);color:var(--text);}
+    .fa-btn.move{background:rgba(255,165,0,0.15);color:#ffaa00;}
+    .fa-btn.move:hover{background:rgba(255,165,0,0.3);}
     .fa-btn.del{background:rgba(255,77,77,0.15);color:#ff6b6b;}
     .fa-btn.del:hover{background:rgba(255,77,77,0.35);}
+
+    /* ── LIST VIEW ── */
+    .files-list{display:flex;flex-direction:column;gap:2px;margin-bottom:24px;}
+    .file-row{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:10px;cursor:pointer;transition:all 0.15s;border:1px solid transparent;position:relative;}
+    .file-row:hover{background:rgba(255,255,255,0.03);border-color:var(--border);}
+    .file-row.selected{background:rgba(0,174,239,0.07);border-color:rgba(0,174,239,0.2);}
+    .file-row .row-ico{font-size:20px;flex-shrink:0;}
+    .file-row .row-thumb{width:28px;height:28px;border-radius:5px;object-fit:cover;flex-shrink:0;}
+    .file-row .row-name{flex:1;font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .file-row .row-type{font-size:11px;color:var(--muted);width:80px;flex-shrink:0;text-align:center;}
+    .file-row .row-size{font-size:12px;color:var(--muted);width:70px;flex-shrink:0;text-align:right;}
+    .file-row .row-date{font-size:11px;color:var(--muted);width:90px;flex-shrink:0;text-align:right;}
+    .file-row .row-actions{display:none;gap:4px;flex-shrink:0;}
+    .file-row:hover .row-actions{display:flex;}
+    .file-row .check-col{width:20px;flex-shrink:0;}
+    .row-checkbox{width:14px;height:14px;accent-color:var(--sky);cursor:pointer;}
+    .list-header{display:flex;align-items:center;gap:14px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border);margin-bottom:4px;}
+    .list-header .row-name{flex:1;}
+
+    /* ── FOLDERS ── */
+    .folder-bar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+    .folder-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:9px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s;user-select:none;}
+    .folder-chip:hover{border-color:rgba(0,174,239,0.35);color:var(--text);}
+    .folder-chip.active{background:rgba(0,174,239,0.1);border-color:rgba(0,174,239,0.4);color:var(--sky);}
+    .folder-chip .fc-count{font-size:10px;background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:99px;}
+    .new-folder-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:transparent;border:1px dashed rgba(255,255,255,0.15);border-radius:9px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:var(--font-body);}
+    .new-folder-btn:hover{border-color:var(--sky);color:var(--sky);}
 
     /* empty state */
     .empty-state{text-align:center;padding:60px 24px;color:var(--muted);display:none;}
@@ -100,41 +155,12 @@
     .upload-fab{position:fixed;bottom:28px;right:28px;background:var(--sky);border:none;border-radius:14px;padding:13px 20px;font-family:var(--font-body);font-size:14px;font-weight:600;color:#06090f;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:0 8px 28px var(--sky-glow);transition:all 0.25s;z-index:50;}
     .upload-fab:hover{background:#22c5ff;transform:translateY(-2px);}
 
-
-    /* ── FOLDERS ── */
-    .folder-bar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
-    .folder-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s;user-select:none;}
-    .folder-chip:hover{border-color:rgba(0,174,239,0.35);color:var(--text);}
-    .folder-chip.active{background:rgba(0,174,239,0.1);border-color:rgba(0,174,239,0.4);color:var(--sky);}
-    .folder-chip .fc-ico{font-size:14px;}
-    .folder-chip .fc-count{font-size:10px;background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:99px;color:var(--muted);}
-    .new-folder-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:transparent;border:1px dashed rgba(255,255,255,0.15);border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:var(--font-body);}
-    .new-folder-btn:hover{border-color:var(--sky);color:var(--sky);}
-
-    /* folder modal */
-    .folder-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px;width:360px;z-index:300;display:none;}
-    .folder-modal.open{display:block;}
-    .folder-modal h3{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:18px;}
-    .folder-modal input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-family:var(--font-body);font-size:14px;color:var(--text);outline:none;margin-bottom:14px;}
-    .folder-modal input:focus{border-color:var(--sky);}
-    .folder-modal-btns{display:flex;gap:10px;}
-    .folder-modal-btns button{flex:1;padding:10px;border-radius:10px;font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;}
-    .fmb-cancel{background:rgba(255,255,255,0.06);color:var(--muted);}
-    .fmb-create{background:var(--sky);color:#06090f;}
-    .fmb-create:hover{background:#22c5ff;}
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:299;display:none;}
-    .modal-backdrop.open{display:block;}
-
-    /* move-to-folder dropdown on file card */
-    .fa-btn.move{background:rgba(255,165,0,0.15);color:#ffaa00;}
-    .fa-btn.move:hover{background:rgba(255,165,0,0.3);}
-
-    /* ── PREVIEW MODAL ── */
+    /* ── MODALS ── */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px);}
     .modal-overlay.open{display:flex;}
     .modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:860px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;}
-    .modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-    .modal-filename{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:600px;}
+    .modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:12px;}
+    .modal-filename{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
     .modal-actions{display:flex;gap:8px;flex-shrink:0;}
     .modal-btn{padding:7px 14px;border-radius:8px;border:none;font-family:var(--font-body);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
     .modal-btn.dl{background:var(--sky);color:#06090f;}
@@ -149,6 +175,20 @@
     .modal-no-preview{text-align:center;padding:40px;}
     .modal-no-preview .ico{font-size:52px;margin-bottom:14px;}
     .modal-no-preview p{font-size:14px;color:var(--muted);margin-bottom:20px;}
+
+    /* small modals (folder, rename) */
+    .mini-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px;width:360px;z-index:300;display:none;}
+    .mini-modal.open{display:block;}
+    .mini-modal h3{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:18px;}
+    .mini-modal input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-family:var(--font-body);font-size:14px;color:var(--text);outline:none;margin-bottom:14px;}
+    .mini-modal input:focus{border-color:var(--sky);}
+    .mini-modal-btns{display:flex;gap:10px;}
+    .mini-modal-btns button{flex:1;padding:10px;border-radius:10px;font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;}
+    .mmb-cancel{background:rgba(255,255,255,0.06);color:var(--muted);}
+    .mmb-ok{background:var(--sky);color:#06090f;}
+    .mmb-ok:hover{background:#22c5ff;}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:299;display:none;}
+    .modal-backdrop.open{display:block;}
 
     /* toasts */
     .toast-wrap{position:fixed;top:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;}
@@ -168,6 +208,7 @@
     @media(max-width:768px){
       .sidebar{display:none;}
       .stats-grid{grid-template-columns:repeat(2,1fr);}
+      .list-header .row-type,.list-header .row-date,.file-row .row-type,.file-row .row-date{display:none;}
     }
   </style>
 </head>
@@ -178,19 +219,20 @@
   <div class="logo" onclick="setView('all')">Storedge</div>
 
   <div class="nav-section">Main</div>
-  <div class="nav-item active" id="nav-all"     onclick="setView('all')">     <span class="ico">🗂️</span> My Files</div>
-  <div class="nav-item"        id="nav-starred"  onclick="setView('starred')"> <span class="ico">⭐</span> Starred</div>
-  <div class="nav-item"        id="nav-shared"   onclick="setView('shared')">  <span class="ico">🔗</span> Shared</div>
-  <div class="nav-item"        id="nav-recent"   onclick="setView('recent')">  <span class="ico">🕓</span> Recent</div>
+  <div class="nav-item active" id="nav-all"    onclick="setView('all')">    <span class="ico">🗂️</span> My Files</div>
+  <div class="nav-item" id="nav-starred"        onclick="setView('starred')"><span class="ico">⭐</span> Starred</div>
+  <div class="nav-item" id="nav-recent"         onclick="setView('recent')"> <span class="ico">🕓</span> Recent</div>
+  <div class="nav-item" id="nav-shared"         onclick="setView('shared')"> <span class="ico">🔗</span> Shared</div>
 
-  <div class="nav-section">Workspace</div>
-  <div class="nav-item" onclick="setView('folder','images')">  <span class="ico">🖼️</span> Images</div>
-  <div class="nav-item" onclick="setView('folder','docs')">    <span class="ico">📄</span> Documents</div>
-  <div class="nav-item" onclick="setView('folder','videos')">  <span class="ico">🎬</span> Videos</div>
-  <div class="nav-item" onclick="setView('folder','other')">   <span class="ico">📁</span> Other</div>
-  <div class="nav-item" onclick="setView('trash')">            <span class="ico">🗑️</span> Trash</div>
+  <div class="nav-section">By Type</div>
+  <div class="nav-item" onclick="setView('type','images')">  <span class="ico">🖼️</span> Images</div>
+  <div class="nav-item" onclick="setView('type','docs')">    <span class="ico">📄</span> Documents</div>
+  <div class="nav-item" onclick="setView('type','videos')">  <span class="ico">🎬</span> Videos</div>
+  <div class="nav-item" onclick="setView('type','audio')">   <span class="ico">🎵</span> Audio</div>
+  <div class="nav-item" onclick="setView('type','other')">   <span class="ico">📁</span> Other</div>
 
   <div class="nav-section">Account</div>
+  <div class="nav-item" id="nav-trash" onclick="setView('trash')"><span class="ico">🗑️</span> Trash</div>
   <div class="nav-item"><span class="ico">⚙️</span> Settings</div>
   <div class="nav-item" onclick="logout()"><span class="ico">🚪</span> Log out</div>
 
@@ -217,6 +259,7 @@
   </div>
 
   <div class="content">
+    <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-val" id="s-used">—</div><div class="stat-label">Used</div></div>
       <div class="stat-card"><div class="stat-icon">📄</div><div class="stat-val" id="s-files">—</div><div class="stat-label">Files</div></div>
@@ -224,6 +267,7 @@
       <div class="stat-card"><div class="stat-icon">🔄</div><div class="stat-val" style="color:var(--green);font-size:14px;">Live</div><div class="stat-label">Sync</div></div>
     </div>
 
+    <!-- Upload zone -->
     <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
       <div class="big-ico">☁️</div>
       <p><strong>Drag & drop files here</strong> or click to upload</p>
@@ -231,15 +275,43 @@
     </div>
     <input type="file" id="file-input" style="display:none" multiple onchange="handleFileSelect(event)"/>
 
+    <!-- Folders -->
     <div class="folder-bar" id="folder-bar">
       <button class="new-folder-btn" onclick="openFolderModal()">＋ New Folder</button>
     </div>
 
-    <div class="sec-header">
-      <div class="sec-title" id="view-title">My Files</div>
-      <div class="view-label" id="view-label"></div>
+    <!-- Bulk action bar -->
+    <div class="bulk-bar" id="bulk-bar">
+      <span class="bulk-count" id="bulk-count">0 selected</span>
+      <span class="bulk-select-all" onclick="selectAll()">Select all</span>
+      <button class="bulk-btn move" onclick="bulkMove()">📁 Move</button>
+      <button class="bulk-btn del"  onclick="bulkDelete()">🗑 Delete</button>
+      <button class="bulk-btn cancel" onclick="clearSelection()">✕ Cancel</button>
     </div>
-    <div class="files-grid" id="files-grid"></div>
+
+    <!-- Toolbar: title + sort + view toggle -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="sec-title" id="view-title">My Files</div>
+        <span class="file-count" id="file-count"></span>
+      </div>
+      <div class="toolbar-right">
+        <select class="sort-select" id="sort-select" onchange="applySort()">
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="name-asc">Name A–Z</option>
+          <option value="name-desc">Name Z–A</option>
+          <option value="size-desc">Largest first</option>
+          <option value="size-asc">Smallest first</option>
+        </select>
+        <button class="view-btn active" id="btn-grid" onclick="setViewMode('grid')" title="Grid view">⊞</button>
+        <button class="view-btn" id="btn-list" onclick="setViewMode('list')" title="List view">☰</button>
+      </div>
+    </div>
+
+    <!-- File container (grid or list injected here) -->
+    <div id="files-container"></div>
+
     <div class="empty-state" id="empty-state">
       <div class="empty-ico">📂</div>
       <p id="empty-msg">No files yet.<br/>Upload something to get started.</p>
@@ -247,36 +319,47 @@
   </div>
 </div>
 
-<!-- Upload FAB -->
+<!-- FAB -->
 <button class="upload-fab" onclick="document.getElementById('file-input').click()">↑ Upload Files</button>
 
-<!-- Upload progress bar -->
+<!-- Upload progress -->
 <div class="upload-progress" id="upload-progress">
   <div class="up-title">Uploading…</div>
   <div class="up-bar-bg"><div class="up-bar-fill" id="up-bar"></div></div>
   <div class="up-name" id="up-name"></div>
 </div>
 
-<!-- Folder create modal -->
-<div class="modal-backdrop" id="folder-backdrop" onclick="closeFolderModal()"></div>
-<div class="folder-modal" id="folder-modal">
+<!-- Folder modal -->
+<div class="modal-backdrop" id="mini-backdrop" onclick="closeMiniModals()"></div>
+<div class="mini-modal" id="folder-modal">
   <h3>📁 New Folder</h3>
   <input id="folder-name-input" type="text" placeholder="Folder name…" maxlength="40"
-    onkeydown="if(event.key==='Enter')createFolder();if(event.key==='Escape')closeFolderModal()"/>
-  <div class="folder-modal-btns">
-    <button class="fmb-cancel" onclick="closeFolderModal()">Cancel</button>
-    <button class="fmb-create" onclick="createFolder()">Create</button>
+    onkeydown="if(event.key==='Enter')createFolder();if(event.key==='Escape')closeMiniModals()"/>
+  <div class="mini-modal-btns">
+    <button class="mmb-cancel" onclick="closeMiniModals()">Cancel</button>
+    <button class="mmb-ok" onclick="createFolder()">Create</button>
   </div>
 </div>
 
-<!-- Preview Modal -->
-<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+<!-- Rename modal -->
+<div class="mini-modal" id="rename-modal">
+  <h3>✏️ Rename File</h3>
+  <input id="rename-input" type="text" placeholder="New name…" maxlength="200"
+    onkeydown="if(event.key==='Enter')confirmRename();if(event.key==='Escape')closeMiniModals()"/>
+  <div class="mini-modal-btns">
+    <button class="mmb-cancel" onclick="closeMiniModals()">Cancel</button>
+    <button class="mmb-ok" onclick="confirmRename()">Rename</button>
+  </div>
+</div>
+
+<!-- Preview modal -->
+<div class="modal-overlay" id="preview-modal" onclick="closePreview(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-header">
-      <div class="modal-filename" id="modal-filename">filename.jpg</div>
+      <div class="modal-filename" id="modal-filename">—</div>
       <div class="modal-actions">
-        <button class="modal-btn dl" id="modal-dl-btn" onclick="downloadFile()">⬇ Download</button>
-        <button class="modal-btn close" onclick="closeModal()">✕ Close</button>
+        <button class="modal-btn dl" onclick="downloadCurrent()">⬇ Download</button>
+        <button class="modal-btn close" onclick="closePreview()">✕ Close</button>
       </div>
     </div>
     <div class="modal-body" id="modal-body"></div>
@@ -287,196 +370,32 @@
 <div class="toast-wrap" id="toast-wrap"></div>
 
 <script>
-// ── FOLDERS (client-side — stored in localStorage) ──────
-// Folders are lightweight: just a name + list of fileIds
-// No backend needed — stored locally per user
-
-function getFolders() {
-  const uid = getUserId();
-  const raw = localStorage.getItem('storedge_folders_' + uid);
-  return raw ? JSON.parse(raw) : [];
-}
-
-function saveFolders(folders) {
-  const uid = getUserId();
-  localStorage.setItem('storedge_folders_' + uid, JSON.stringify(folders));
-}
-
-function getUserId() {
-  const u = localStorage.getItem('storedge_user');
-  if (!u) return 'anon';
-  return JSON.parse(u).id || JSON.parse(u)._id || 'anon';
-}
-
-function renderFolderBar() {
-  const bar     = document.getElementById('folder-bar');
-  const folders = getFolders();
-
-  // Clear existing chips (keep the + button)
-  bar.innerHTML = '<button class="new-folder-btn" onclick="openFolderModal()">＋ New Folder</button>';
-
-  folders.forEach(folder => {
-    const filesInFolder = allFiles.filter(f => (f.folderId || null) === folder.id && !f.deleted);
-    const chip = document.createElement('div');
-    chip.className = 'folder-chip' + (currentFolderId === folder.id ? ' active' : '');
-    chip.innerHTML = `<span class="fc-ico">📁</span><span>${folder.name}</span><span class="fc-count">${filesInFolder.length}</span>`;
-    chip.onclick   = () => openFolder(folder.id, folder.name);
-
-    // Right-click to rename/delete folder
-    chip.oncontextmenu = (e) => {
-      e.preventDefault();
-      if (confirm(\`Delete folder "\${folder.name}"? Files inside will not be deleted.\`)) {
-        deleteFolder(folder.id);
-      }
-    };
-    bar.appendChild(chip);
-  });
-}
-
-function openFolder(folderId, folderName) {
-  currentFolderId = folderId;
-  currentView     = 'folder-custom';
-  document.getElementById('view-title').textContent = '📁 ' + folderName;
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const filtered = allFiles.filter(f => f.folderId === folderId && !f.deleted);
-  renderFiles(filtered);
-  renderFolderBar();
-}
-
-function openFolderModal() {
-  document.getElementById('folder-modal').classList.add('open');
-  document.getElementById('folder-backdrop').classList.add('open');
-  document.getElementById('folder-name-input').value = '';
-  setTimeout(() => document.getElementById('folder-name-input').focus(), 50);
-}
-
-function closeFolderModal() {
-  document.getElementById('folder-modal').classList.remove('open');
-  document.getElementById('folder-backdrop').classList.remove('open');
-}
-
-function createFolder() {
-  const name = document.getElementById('folder-name-input').value.trim();
-  if (!name) return;
-
-  const folders = getFolders();
-  if (folders.find(f => f.name.toLowerCase() === name.toLowerCase())) {
-    toast('A folder with that name already exists.', 'err'); return;
-  }
-
-  const newFolder = { id: 'folder_' + Date.now(), name, createdAt: new Date().toISOString() };
-  folders.push(newFolder);
-  saveFolders(folders);
-  closeFolderModal();
-  renderFolderBar();
-  toast(`Folder "${name}" created ✓`, 'ok');
-}
-
-function deleteFolder(folderId) {
-  let folders = getFolders();
-  folders = folders.filter(f => f.id !== folderId);
-  saveFolders(folders);
-
-  // Remove folderId from files in that folder (move back to root)
-  allFiles = allFiles.map(f => f.folderId === folderId ? { ...f, folderId: null } : f);
-  syncFolderAssignments();
-
-  if (currentFolderId === folderId) {
-    currentFolderId = null;
-    setView('all');
-  }
-  renderFolderBar();
-  toast('Folder deleted. Files moved to My Files.', 'ok');
-}
-
-function moveFileToFolder(fileId, folderId) {
-  allFiles = allFiles.map(f => f._id === fileId ? { ...f, folderId } : f);
-  syncFolderAssignments();
-  renderFolderBar();
-  const folder = getFolders().find(f => f.id === folderId);
-  toast(`Moved to ${folder ? folder.name : 'folder'} ✓`, 'ok');
-  renderFiles(filterFiles(allFiles, currentView));
-}
-
-function syncFolderAssignments() {
-  // Persist folder assignments in localStorage keyed by fileId
-  const uid  = getUserId();
-  const map  = {};
-  allFiles.forEach(f => { if (f.folderId) map[f._id] = f.folderId; });
-  localStorage.setItem('storedge_file_folders_' + uid, JSON.stringify(map));
-}
-
-function loadFolderAssignments() {
-  // Restore folder assignments into allFiles
-  const uid = getUserId();
-  const raw = localStorage.getItem('storedge_file_folders_' + uid);
-  if (!raw) return;
-  const map = JSON.parse(raw);
-  allFiles = allFiles.map(f => ({ ...f, folderId: map[f._id] || null }));
-}
-
-function showMoveMenu(fileId, fileName, e) {
-  e.stopPropagation();
-  const folders = getFolders();
-  if (!folders.length) {
-    toast('No folders yet. Create one first with ＋ New Folder.', 'info', 3500);
-    return;
-  }
-
-  // Build a quick dropdown
-  const existing = document.getElementById('move-menu');
-  if (existing) existing.remove();
-
-  const menu  = document.createElement('div');
-  menu.id     = 'move-menu';
-  menu.style.cssText = `
-    position:fixed;background:var(--surface2);border:1px solid var(--border);
-    border-radius:10px;padding:6px;z-index:400;min-width:160px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.5);
-  `;
-
-  // Position near click
-  menu.style.left = Math.min(e.clientX, window.innerWidth - 180) + 'px';
-  menu.style.top  = Math.min(e.clientY, window.innerHeight - (folders.length * 36 + 20)) + 'px';
-
-  folders.forEach(folder => {
-    const item = document.createElement('div');
-    item.style.cssText = 'padding:8px 12px;border-radius:7px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;';
-    item.innerHTML = `📁 ${folder.name}`;
-    item.onmouseenter = () => item.style.background = 'rgba(255,255,255,0.06)';
-    item.onmouseleave = () => item.style.background = 'transparent';
-    item.onclick      = () => { moveFileToFolder(fileId, folder.id); menu.remove(); };
-    menu.appendChild(item);
-  });
-
-  // Remove folder option
-  const removeItem = document.createElement('div');
-  removeItem.style.cssText = 'padding:8px 12px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--muted);border-top:1px solid var(--border);margin-top:4px;';
-  removeItem.innerHTML = '✕ Remove from folder';
-  removeItem.onmouseenter = () => removeItem.style.background = 'rgba(255,255,255,0.04)';
-  removeItem.onmouseleave = () => removeItem.style.background = 'transparent';
-  removeItem.onclick      = () => { moveFileToFolder(fileId, null); menu.remove(); };
-  menu.appendChild(removeItem);
-
-  document.body.appendChild(menu);
-  setTimeout(() => document.addEventListener('click', () => menu.remove(), { once: true }), 10);
-}
-
-// ── CONFIG ───────────────────────────────────────────────
-const API_URL = 'https://storedge-backend.onrender.com';
+// ════════════════════════════════════════
+//  CONFIG
+// ════════════════════════════════════════
+const API_URL      = 'https://storedge-backend.onrender.com';
 const FREE_STORAGE = 2 * 1024 * 1024 * 1024;
 
-// ── AUTH GUARD ───────────────────────────────────────────
+// ── AUTH GUARD ───────────────────────────
 const token = localStorage.getItem('storedge_token');
 if (!token) window.location.href = 'login.html';
 
-// ── STATE ────────────────────────────────────────────────
-let allFiles       = [];
-let currentView    = 'all';
-let currentFile    = null; // for modal download
+// ════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════
+let allFiles        = [];
+let visibleFiles    = [];   // currently shown (filtered + sorted)
+let currentView     = 'all';
+let currentViewSub  = null;
 let currentFolderId = null;
+let viewMode        = localStorage.getItem('storedge_view') || 'grid'; // 'grid' | 'list'
+let sortMode        = localStorage.getItem('storedge_sort') || 'date-desc';
+let selectedIds     = new Set();
+let renameTarget    = null; // { id, fileName, ext }
 
-// ── TOAST ────────────────────────────────────────────────
+// ════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════
 function toast(msg, type='ok', dur=3500) {
   const wrap = document.getElementById('toast-wrap');
   const el   = document.createElement('div');
@@ -486,14 +405,9 @@ function toast(msg, type='ok', dur=3500) {
   setTimeout(() => el.remove(), dur);
 }
 
-// ── LOGOUT ───────────────────────────────────────────────
-function logout() {
-  localStorage.removeItem('storedge_token');
-  localStorage.removeItem('storedge_user');
-  window.location.href = 'login.html';
-}
-
-// ── UTILS ────────────────────────────────────────────────
+// ════════════════════════════════════════
+//  UTILS
+// ════════════════════════════════════════
 function fmtBytes(b) {
   if (!b || b === 0) return '0 B';
   const k = 1024, s = ['B','KB','MB','GB'];
@@ -501,13 +415,20 @@ function fmtBytes(b) {
   return parseFloat((b / Math.pow(k, i)).toFixed(2)) + ' ' + s[i];
 }
 
+function fmtDate(d) {
+  const date = new Date(d);
+  return date.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function fileExt(name) { return name.split('.').pop().toLowerCase(); }
+
 function fileIcon(name) {
-  const ext = name.split('.').pop().toLowerCase();
+  const ext = fileExt(name);
   const m = {
     pdf:'📄',doc:'📝',docx:'📝',txt:'📝',md:'📝',
     jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',webp:'🖼️',svg:'🖼️',
     mp4:'🎬',mov:'🎬',avi:'🎬',mkv:'🎬',webm:'🎬',
-    mp3:'🎵',wav:'🎵',flac:'🎵',ogg:'🎵',
+    mp3:'🎵',wav:'🎵',flac:'🎵',ogg:'🎵',m4a:'🎵',
     zip:'🗃️',rar:'🗃️','7z':'🗃️',tar:'🗃️',gz:'🗃️',
     xls:'📊',xlsx:'📊',csv:'📊',
     ppt:'📋',pptx:'📋',
@@ -516,80 +437,129 @@ function fileIcon(name) {
   return m[ext] || '📎';
 }
 
-function isImage(name) {
-  return /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(name);
-}
-function isVideo(name) {
-  return /\.(mp4|webm|mov|ogg)$/i.test(name);
-}
-function isAudio(name) {
-  return /\.(mp3|wav|flac|ogg|m4a)$/i.test(name);
-}
-function isPdf(name) {
-  return /\.pdf$/i.test(name);
-}
+function isImage(n) { return /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(n); }
+function isVideo(n) { return /\.(mp4|webm|mov|ogg|avi|mkv)$/i.test(n); }
+function isAudio(n) { return /\.(mp3|wav|flac|ogg|m4a)$/i.test(n); }
+function isPdf(n)   { return /\.pdf$/i.test(n); }
 
-function fileCategory(name) {
-  if (isImage(name))  return 'images';
-  if (isVideo(name))  return 'videos';
-  if (isPdf(name) || /\.(doc|docx|txt|md|ppt|pptx|xls|xlsx|csv)$/i.test(name)) return 'docs';
+function fileCategory(n) {
+  if (isImage(n)) return 'images';
+  if (isVideo(n)) return 'videos';
+  if (isAudio(n)) return 'audio';
+  if (isPdf(n) || /\.(doc|docx|txt|md|ppt|pptx|xls|xlsx|csv)$/i.test(n)) return 'docs';
   return 'other';
 }
 
-// ── SIDEBAR NAV ──────────────────────────────────────────
+function getUserId() {
+  const u = localStorage.getItem('storedge_user');
+  if (!u) return 'anon';
+  try { const p = JSON.parse(u); return p.id || p._id || 'anon'; } catch { return 'anon'; }
+}
+
+// ════════════════════════════════════════
+//  LOGOUT
+// ════════════════════════════════════════
+function logout() {
+  localStorage.removeItem('storedge_token');
+  localStorage.removeItem('storedge_user');
+  window.location.href = 'login.html';
+}
+
+// ════════════════════════════════════════
+//  VIEW MODE (grid / list)
+// ════════════════════════════════════════
+function setViewMode(mode) {
+  viewMode = mode;
+  localStorage.setItem('storedge_view', mode);
+  document.getElementById('btn-grid').classList.toggle('active', mode === 'grid');
+  document.getElementById('btn-list').classList.toggle('active', mode === 'list');
+  renderFiles(visibleFiles);
+}
+
+// ════════════════════════════════════════
+//  SORT
+// ════════════════════════════════════════
+function applySort() {
+  sortMode = document.getElementById('sort-select').value;
+  localStorage.setItem('storedge_sort', sortMode);
+  visibleFiles = sortFiles(visibleFiles);
+  renderFiles(visibleFiles);
+}
+
+function sortFiles(files) {
+  const sorted = [...files];
+  switch(sortMode) {
+    case 'date-desc': return sorted.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+    case 'date-asc':  return sorted.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+    case 'name-asc':  return sorted.sort((a,b) => a.fileName.localeCompare(b.fileName));
+    case 'name-desc': return sorted.sort((a,b) => b.fileName.localeCompare(a.fileName));
+    case 'size-desc': return sorted.sort((a,b) => b.size - a.size);
+    case 'size-asc':  return sorted.sort((a,b) => a.size - b.size);
+    default: return sorted;
+  }
+}
+
+// ════════════════════════════════════════
+//  SIDEBAR NAV
+// ════════════════════════════════════════
 function setView(view, sub) {
-  currentView = view;
+  currentView    = view;
+  currentViewSub = sub || null;
+  currentFolderId = null;
+  clearSelection();
+
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navId = { all:'nav-all', starred:'nav-starred', recent:'nav-recent', shared:'nav-shared', trash:'nav-trash' }[view];
+  if (navId) document.getElementById(navId)?.classList.add('active');
 
   const titles = {
-    all:'My Files', starred:'Starred', shared:'Shared',
-    recent:'Recent', trash:'Trash',
-    folder: { images:'Images', docs:'Documents', videos:'Videos', other:'Other Files' }
+    all:'My Files', starred:'Starred', recent:'Recent (7 days)',
+    shared:'Shared', trash:'Trash',
+    type:{ images:'🖼️ Images', docs:'📄 Documents', videos:'🎬 Videos', audio:'🎵 Audio', other:'📁 Other' }
   };
-
-  let title = view === 'folder' ? titles.folder[sub] : titles[view];
+  const title = view === 'type' ? titles.type[sub] : titles[view] || 'My Files';
   document.getElementById('view-title').textContent = title;
-  document.getElementById('nav-' + (view === 'folder' ? '' : view))?.classList.add('active');
-  if (view === 'all') document.getElementById('nav-all').classList.add('active');
-
-  // clear search
   document.getElementById('search-input').value = '';
-  renderFiles(filterFiles(allFiles, view, sub));
+
+  visibleFiles = sortFiles(filterFiles(allFiles, view, sub));
+  renderFolderBar();
+  renderFiles(visibleFiles);
 }
 
 function filterFiles(files, view, sub) {
   const now = Date.now();
-  const day = 86400000;
   switch(view) {
     case 'all':     return files.filter(f => !f.deleted);
     case 'starred': return files.filter(f => f.starred && !f.deleted);
-    case 'recent':  return files.filter(f => !f.deleted && (now - new Date(f.createdAt).getTime()) < 7 * day);
+    case 'recent':  return files.filter(f => !f.deleted && (now - new Date(f.createdAt)) < 7 * 86400000);
     case 'trash':   return files.filter(f => f.deleted);
-    case 'shared':  return []; // future feature
-    case 'folder':  return files.filter(f => !f.deleted && fileCategory(f.fileName) === sub);
-    default:        return files;
+    case 'shared':  return [];
+    case 'type':    return files.filter(f => !f.deleted && fileCategory(f.fileName) === sub);
+    default:        return files.filter(f => !f.deleted);
   }
 }
 
-// ── SEARCH ───────────────────────────────────────────────
+// ════════════════════════════════════════
+//  SEARCH
+// ════════════════════════════════════════
 function handleSearch(q) {
+  clearSelection();
   if (!q.trim()) {
-    renderFiles(filterFiles(allFiles, currentView));
-    return;
+    visibleFiles = sortFiles(filterFiles(allFiles, currentView, currentViewSub));
+  } else {
+    visibleFiles = sortFiles(allFiles.filter(f =>
+      !f.deleted && f.fileName.toLowerCase().includes(q.toLowerCase())
+    ));
   }
-  const filtered = allFiles.filter(f =>
-    f.fileName.toLowerCase().includes(q.toLowerCase()) && !f.deleted
-  );
-  renderFiles(filtered);
-  document.getElementById('view-label').textContent = `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
+  renderFiles(visibleFiles);
 }
 
-// ── LOAD USER ────────────────────────────────────────────
+// ════════════════════════════════════════
+//  LOAD USER
+// ════════════════════════════════════════
 async function loadUser() {
   try {
-    const res = await fetch(`${API_URL}/api/auth/me`, {
-      headers: { Authorization: token }
-    });
+    const res = await fetch(`${API_URL}/api/auth/me`, { headers:{ Authorization: token } });
     if (res.status === 401) { logout(); return; }
     if (!res.ok) return;
     const user = await res.json();
@@ -597,89 +567,247 @@ async function loadUser() {
     renderUser(user);
   } catch {
     const cached = localStorage.getItem('storedge_user');
-    if (cached) renderUser(JSON.parse(cached));
+    if (cached) try { renderUser(JSON.parse(cached)); } catch {}
   }
 }
 
 function renderUser(user) {
   const name = user.name || 'User';
-  document.getElementById('user-name').textContent  = name;
+  document.getElementById('user-name').textContent   = name;
   document.getElementById('avatar-init').textContent = name.charAt(0).toUpperCase();
   const used  = user.storageUsed  || 0;
   const limit = user.storageLimit || FREE_STORAGE;
-  const pct   = Math.min((used / limit) * 100, 100).toFixed(1);
-  document.getElementById('sto-fill').style.width  = pct + '%';
-  document.getElementById('sto-text').textContent  = `${fmtBytes(used)} of ${fmtBytes(limit)} used`;
-  document.getElementById('s-used').textContent    = fmtBytes(used);
+  const pct   = Math.min((used/limit)*100, 100).toFixed(1);
+  document.getElementById('sto-fill').style.width   = pct + '%';
+  document.getElementById('sto-text').textContent   = `${fmtBytes(used)} of ${fmtBytes(limit)} used`;
+  document.getElementById('s-used').textContent     = fmtBytes(used);
   document.getElementById('plan-badge').textContent = user.plan || 'Free';
 }
 
-// ── LOAD FILES ───────────────────────────────────────────
+// ════════════════════════════════════════
+//  LOAD FILES
+// ════════════════════════════════════════
 async function loadFiles() {
   try {
-    const res = await fetch(`${API_URL}/api/files`, {
-      headers: { Authorization: token }
-    });
+    const res = await fetch(`${API_URL}/api/files`, { headers:{ Authorization: token } });
     if (res.status === 401) { logout(); return; }
     if (!res.ok) return;
     allFiles = await res.json();
     loadFolderAssignments();
     document.getElementById('s-files').textContent = allFiles.length;
+    visibleFiles = sortFiles(filterFiles(allFiles, currentView, currentViewSub));
     renderFolderBar();
-    renderFiles(filterFiles(allFiles, currentView));
+    renderFiles(visibleFiles);
   } catch {
     document.getElementById('s-files').textContent = '—';
   }
 }
 
-// ── RENDER FILES ─────────────────────────────────────────
+// ════════════════════════════════════════
+//  RENDER FILES
+// ════════════════════════════════════════
 function renderFiles(files) {
-  const grid  = document.getElementById('files-grid');
-  const empty = document.getElementById('empty-state');
-  const label = document.getElementById('view-label');
-  grid.innerHTML = '';
+  const container = document.getElementById('files-container');
+  const empty     = document.getElementById('empty-state');
+  const count     = document.getElementById('file-count');
+  container.innerHTML = '';
 
   if (!files.length) {
     empty.style.display = 'block';
-    label.textContent   = '';
+    count.textContent   = '';
     return;
   }
   empty.style.display = 'none';
-  label.textContent   = `${files.length} file${files.length !== 1 ? 's' : ''}`;
+  count.textContent   = `${files.length} file${files.length !== 1 ? 's' : ''}`;
+
+  if (viewMode === 'grid') renderGrid(files, container);
+  else renderList(files, container);
+}
+
+function renderGrid(files, container) {
+  const grid = document.createElement('div');
+  grid.className = 'files-grid';
 
   files.forEach(f => {
     const card = document.createElement('div');
-    card.className = 'file-card';
-    card.onclick   = () => openPreview(f);
+    card.className = 'file-card' + (selectedIds.has(f._id) ? ' selected' : '');
+    card.dataset.id = f._id;
 
-    // Thumbnail or icon
-    let thumbHtml = '';
-    if (isImage(f.fileName) && f.fileUrl) {
-      thumbHtml = `<img class="file-thumb" src="${f.fileUrl}" alt="${f.fileName}" onerror="this.style.display='none';this.nextSibling.style.display='block'"/><div class="file-ico" style="display:none">${fileIcon(f.fileName)}</div>`;
-    } else {
-      thumbHtml = `<div class="file-ico">${fileIcon(f.fileName)}</div>`;
-    }
+    const thumbHtml = isImage(f.fileName) && f.fileUrl
+      ? `<img class="file-thumb" src="${f.fileUrl}" alt="${f.fileName}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><div class="file-ico" style="display:none">${fileIcon(f.fileName)}</div>`
+      : `<div class="file-ico">${fileIcon(f.fileName)}</div>`;
 
+    const safeF = encodeURIComponent(JSON.stringify(f));
     card.innerHTML = `
       ${thumbHtml}
       <div class="file-name" title="${f.fileName}">${f.fileName}</div>
       <div class="file-size">${fmtBytes(f.size)}</div>
       <div class="file-actions" onclick="event.stopPropagation()">
-        <button class="fa-btn preview" title="Preview" onclick="openPreview(${JSON.stringify(f).replace(/"/g,'&quot;')})">👁</button>
+        <button class="fa-btn preview"  title="Preview"  onclick='openPreview(${JSON.stringify(f).replace(/'/g,"&#39;")})'>👁</button>
         <button class="fa-btn download" title="Download" onclick="triggerDownload('${f.fileUrl}','${f.fileName}')">⬇</button>
-        <button class="fa-btn move" title="Move to folder" onclick="showMoveMenu('${f._id}','${f.fileName}',event)">📁</button>
-        <button class="fa-btn del" title="Delete" onclick="deleteFile('${f._id}','${f.fileName}')">🗑</button>
+        <button class="fa-btn rename"   title="Rename"   onclick="openRename('${f._id}','${f.fileName}')">✏️</button>
+        <button class="fa-btn move"     title="Move"     onclick="showMoveMenu('${f._id}',event)">📁</button>
+        <button class="fa-btn del"      title="Delete"   onclick="deleteFile('${f._id}','${f.fileName}')">🗑</button>
       </div>
     `;
+    card.onclick = (e) => {
+      if (e.target.closest('.file-actions')) return;
+      if (selectedIds.size > 0) { toggleSelect(f._id, card); return; }
+      openPreview(f);
+    };
+    card.oncontextmenu = (e) => { e.preventDefault(); toggleSelect(f._id, card); };
     grid.appendChild(card);
   });
+
+  container.appendChild(grid);
 }
 
-// ── PREVIEW MODAL ────────────────────────────────────────
+function renderList(files, container) {
+  const list = document.createElement('div');
+  list.className = 'files-list';
+
+  // Header
+  const header = document.createElement('div');
+  header.className = 'list-header';
+  header.innerHTML = `
+    <div class="check-col"><input type="checkbox" class="row-checkbox" onchange="toggleSelectAll(this)"/></div>
+    <div style="width:28px;flex-shrink:0"></div>
+    <div class="row-name">Name</div>
+    <div class="row-type">Type</div>
+    <div class="row-size">Size</div>
+    <div class="row-date">Date</div>
+    <div style="width:110px"></div>
+  `;
+  list.appendChild(header);
+
+  files.forEach(f => {
+    const row = document.createElement('div');
+    row.className = 'file-row' + (selectedIds.has(f._id) ? ' selected' : '');
+    row.dataset.id = f._id;
+
+    const iconHtml = isImage(f.fileName) && f.fileUrl
+      ? `<img class="row-thumb" src="${f.fileUrl}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      : `<div class="row-ico">${fileIcon(f.fileName)}</div>`;
+
+    row.innerHTML = `
+      <div class="check-col" onclick="event.stopPropagation()">
+        <input type="checkbox" class="row-checkbox" ${selectedIds.has(f._id)?'checked':''} onchange="toggleSelect('${f._id}',this.closest('.file-row'))"/>
+      </div>
+      ${iconHtml}
+      <div class="row-name" title="${f.fileName}">${f.fileName}</div>
+      <div class="row-type">${fileExt(f.fileName).toUpperCase()}</div>
+      <div class="row-size">${fmtBytes(f.size)}</div>
+      <div class="row-date">${fmtDate(f.createdAt)}</div>
+      <div class="row-actions" onclick="event.stopPropagation()">
+        <button class="fa-btn preview"  title="Preview"  onclick='openPreview(${JSON.stringify(f).replace(/'/g,"&#39;")})'>👁</button>
+        <button class="fa-btn download" title="Download" onclick="triggerDownload('${f.fileUrl}','${f.fileName}')">⬇</button>
+        <button class="fa-btn rename"   title="Rename"   onclick="openRename('${f._id}','${f.fileName}')">✏️</button>
+        <button class="fa-btn del"      title="Delete"   onclick="deleteFile('${f._id}','${f.fileName}')">🗑</button>
+      </div>
+    `;
+    row.onclick = (e) => {
+      if (e.target.closest('.row-actions') || e.target.classList.contains('row-checkbox')) return;
+      openPreview(f);
+    };
+    list.appendChild(row);
+  });
+
+  container.appendChild(list);
+}
+
+// ════════════════════════════════════════
+//  SELECTION (bulk)
+// ════════════════════════════════════════
+function toggleSelect(id, el) {
+  if (selectedIds.has(id)) {
+    selectedIds.delete(id);
+    el.classList.remove('selected');
+    const cb = el.querySelector('.row-checkbox');
+    if (cb) cb.checked = false;
+  } else {
+    selectedIds.add(id);
+    el.classList.add('selected');
+    const cb = el.querySelector('.row-checkbox');
+    if (cb) cb.checked = true;
+  }
+  updateBulkBar();
+}
+
+function toggleSelectAll(cb) {
+  if (cb.checked) selectAll(); else clearSelection();
+}
+
+function selectAll() {
+  visibleFiles.forEach(f => selectedIds.add(f._id));
+  renderFiles(visibleFiles);
+  updateBulkBar();
+}
+
+function clearSelection() {
+  selectedIds.clear();
+  updateBulkBar();
+  renderFiles(visibleFiles);
+}
+
+function updateBulkBar() {
+  const bar = document.getElementById('bulk-bar');
+  const cnt = document.getElementById('bulk-count');
+  const n   = selectedIds.size;
+  if (n > 0) {
+    bar.classList.add('show');
+    cnt.textContent = `${n} selected`;
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+async function bulkDelete() {
+  const ids = [...selectedIds];
+  if (!ids.length) return;
+  if (!confirm(`Delete ${ids.length} file${ids.length>1?'s':''}? This cannot be undone.`)) return;
+  let done = 0;
+  for (const id of ids) {
+    const f = allFiles.find(x => x._id === id);
+    if (!f) continue;
+    const res = await fetch(`${API_URL}/api/files/${id}`, { method:'DELETE', headers:{ Authorization: token } });
+    if (res.ok) done++;
+  }
+  toast(`Deleted ${done} file${done>1?'s':''}.`, 'ok');
+  clearSelection();
+  loadFiles();
+  loadUser();
+}
+
+function bulkMove() {
+  const ids = [...selectedIds];
+  if (!ids.length) return;
+  const folders = getFolders();
+  if (!folders.length) { toast('Create a folder first.', 'info'); return; }
+
+  // Simple prompt-based folder select for bulk
+  const names = folders.map((f,i) => `${i+1}. ${f.name}`).join('\n');
+  const choice = prompt(`Move ${ids.length} file(s) to which folder?\n\n${names}\n\nEnter number:`);
+  if (!choice) return;
+  const idx = parseInt(choice) - 1;
+  if (isNaN(idx) || idx < 0 || idx >= folders.length) { toast('Invalid choice.', 'err'); return; }
+  const folder = folders[idx];
+  ids.forEach(id => {
+    allFiles = allFiles.map(f => f._id === id ? { ...f, folderId: folder.id } : f);
+  });
+  syncFolderAssignments();
+  clearSelection();
+  renderFolderBar();
+  toast(`Moved ${ids.length} file(s) to "${folder.name}" ✓`, 'ok');
+}
+
+// ════════════════════════════════════════
+//  PREVIEW
+// ════════════════════════════════════════
+let currentPreviewFile = null;
+
 function openPreview(f) {
-  // f might be stringified from onclick attr
-  if (typeof f === 'string') f = JSON.parse(f);
-  currentFile = f;
+  if (typeof f === 'string') try { f = JSON.parse(f); } catch { return; }
+  currentPreviewFile = f;
   document.getElementById('modal-filename').textContent = f.fileName;
   const body = document.getElementById('modal-body');
   body.innerHTML = '';
@@ -687,34 +815,35 @@ function openPreview(f) {
   if (isImage(f.fileName)) {
     body.innerHTML = `<img src="${f.fileUrl}" alt="${f.fileName}"/>`;
   } else if (isVideo(f.fileName)) {
-    body.innerHTML = `<video controls autoplay><source src="${f.fileUrl}"><p style="color:var(--muted)">Your browser doesn't support this video.</p></video>`;
+    body.innerHTML = `<video controls autoplay><source src="${f.fileUrl}"><p style="color:var(--muted)">Browser can't play this video.</p></video>`;
   } else if (isAudio(f.fileName)) {
-    body.innerHTML = `<audio controls autoplay><source src="${f.fileUrl}"><p style="color:var(--muted)">Your browser doesn't support audio.</p></audio>`;
+    body.innerHTML = `<audio controls autoplay><source src="${f.fileUrl}"><p style="color:var(--muted)">Browser can't play this audio.</p></audio>`;
   } else if (isPdf(f.fileName)) {
     body.innerHTML = `<iframe src="${f.fileUrl}"></iframe>`;
   } else {
-    body.innerHTML = `
-      <div class="modal-no-preview">
-        <div class="ico">${fileIcon(f.fileName)}</div>
-        <p>No preview available for this file type.</p>
-        <button class="modal-btn dl" onclick="triggerDownload('${f.fileUrl}','${f.fileName}')">⬇ Download File</button>
-      </div>`;
+    body.innerHTML = `<div class="modal-no-preview"><div class="ico">${fileIcon(f.fileName)}</div><p>No preview for this file type.</p><button class="modal-btn dl" onclick="triggerDownload('${f.fileUrl}','${f.fileName}')">⬇ Download</button></div>`;
   }
-
-  document.getElementById('modal').classList.add('open');
+  document.getElementById('preview-modal').classList.add('open');
 }
 
-function closeModal(e) {
-  if (e && e.target !== document.getElementById('modal')) return;
-  document.getElementById('modal').classList.remove('open');
-  document.getElementById('modal-body').innerHTML = ''; // stop video/audio
-  currentFile = null;
+function closePreview(e) {
+  if (e && e.target !== document.getElementById('preview-modal')) return;
+  document.getElementById('preview-modal').classList.remove('open');
+  document.getElementById('modal-body').innerHTML = '';
+  currentPreviewFile = null;
 }
 
-function downloadFile() {
-  if (currentFile) triggerDownload(currentFile.fileUrl, currentFile.fileName);
+function downloadCurrent() {
+  if (currentPreviewFile) triggerDownload(currentPreviewFile.fileUrl, currentPreviewFile.fileName);
 }
 
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePreview(true);
+});
+
+// ════════════════════════════════════════
+//  DOWNLOAD (blob fetch — fixes cross-origin image download)
+// ════════════════════════════════════════
 async function triggerDownload(url, name) {
   toast('Preparing download…', 'info', 2000);
   try {
@@ -722,82 +851,244 @@ async function triggerDownload(url, name) {
     const blob = await res.blob();
     const burl = URL.createObjectURL(blob);
     const a    = document.createElement('a');
-    a.href     = burl;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    a.href = burl; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(burl), 10000);
   } catch {
-    // CORS fallback — open in new tab
     window.open(url, '_blank');
-    toast('Tip: right-click the image → Save As to download', 'info', 6000);
+    toast('Tip: right-click → Save As to download', 'info', 5000);
   }
 }
 
-// Close modal on Escape key
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal(true);
-});
+// ════════════════════════════════════════
+//  RENAME
+// ════════════════════════════════════════
+function openRename(id, fileName) {
+  renameTarget = { id, fileName };
+  const input = document.getElementById('rename-input');
+  // Pre-fill without extension so user edits just the name
+  const dotIdx = fileName.lastIndexOf('.');
+  input.value = dotIdx > 0 ? fileName.slice(0, dotIdx) : fileName;
+  openMiniModal('rename-modal');
+  setTimeout(() => { input.focus(); input.select(); }, 60);
+}
 
-// ── DELETE FILE ──────────────────────────────────────────
+async function confirmRename() {
+  if (!renameTarget) return;
+  const input    = document.getElementById('rename-input');
+  const newBase  = input.value.trim();
+  if (!newBase) return;
+
+  // Preserve original extension
+  const { id, fileName } = renameTarget;
+  const dotIdx  = fileName.lastIndexOf('.');
+  const ext     = dotIdx > 0 ? fileName.slice(dotIdx) : '';
+  const newName = newBase + ext;
+
+  closeMiniModals();
+
+  try {
+    const res = await fetch(`${API_URL}/api/files/${id}/rename`, {
+      method: 'PATCH',
+      headers: { Authorization: token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fileName: newName })
+    });
+
+    if (!res.ok) {
+      // Backend not yet wired — rename locally and note it
+      allFiles = allFiles.map(f => f._id === id ? { ...f, fileName: newName } : f);
+      visibleFiles = visibleFiles.map(f => f._id === id ? { ...f, fileName: newName } : f);
+      renderFiles(visibleFiles);
+      toast(`Renamed to "${newName}" ✓ (local only — add rename route to backend)`, 'ok', 5000);
+      return;
+    }
+    toast(`Renamed to "${newName}" ✓`, 'ok');
+    loadFiles();
+  } catch {
+    // Offline rename fallback
+    allFiles = allFiles.map(f => f._id === id ? { ...f, fileName: newName } : f);
+    visibleFiles = visibleFiles.map(f => f._id === id ? { ...f, fileName: newName } : f);
+    renderFiles(visibleFiles);
+    toast(`Renamed locally. Add PATCH /api/files/:id/rename to backend to persist.`, 'info', 6000);
+  }
+  renameTarget = null;
+}
+
+// ════════════════════════════════════════
+//  DELETE
+// ════════════════════════════════════════
 async function deleteFile(id, name) {
   if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
   try {
     const res = await fetch(`${API_URL}/api/files/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: token }
+      method: 'DELETE', headers: { Authorization: token }
     });
-    if (!res.ok) { toast('Failed to delete file.', 'err'); return; }
+    if (!res.ok) { toast('Delete failed.', 'err'); return; }
     toast(`"${name}" deleted.`, 'ok');
-    loadFiles();
-    loadUser();
+    selectedIds.delete(id);
+    updateBulkBar();
+    loadFiles(); loadUser();
   } catch {
     toast('Delete failed. Check connection.', 'err');
   }
 }
 
-// ── FILE UPLOAD ──────────────────────────────────────────
+// ════════════════════════════════════════
+//  FOLDERS
+// ════════════════════════════════════════
+function getFolders() {
+  const raw = localStorage.getItem('storedge_folders_' + getUserId());
+  return raw ? JSON.parse(raw) : [];
+}
+function saveFolders(f) {
+  localStorage.setItem('storedge_folders_' + getUserId(), JSON.stringify(f));
+}
+
+function renderFolderBar() {
+  const bar     = document.getElementById('folder-bar');
+  const folders = getFolders();
+  bar.innerHTML = '<button class="new-folder-btn" onclick="openFolderModal()">＋ New Folder</button>';
+  folders.forEach(folder => {
+    const count = allFiles.filter(f => f.folderId === folder.id && !f.deleted).length;
+    const chip  = document.createElement('div');
+    chip.className = 'folder-chip' + (currentFolderId === folder.id ? ' active' : '');
+    chip.innerHTML = `📁 ${folder.name} <span class="fc-count">${count}</span>`;
+    chip.onclick   = () => openFolder(folder.id, folder.name);
+    chip.oncontextmenu = (e) => { e.preventDefault(); if (confirm(`Delete folder "${folder.name}"?`)) deleteFolder(folder.id); };
+    bar.appendChild(chip);
+  });
+}
+
+function openFolder(folderId, name) {
+  currentFolderId = folderId;
+  currentView     = 'folder-custom';
+  clearSelection();
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-title').textContent = `📁 ${name}`;
+  visibleFiles = sortFiles(allFiles.filter(f => f.folderId === folderId && !f.deleted));
+  renderFolderBar();
+  renderFiles(visibleFiles);
+}
+
+function openFolderModal() { openMiniModal('folder-modal'); setTimeout(()=>document.getElementById('folder-name-input').focus(),60); }
+
+function createFolder() {
+  const name = document.getElementById('folder-name-input').value.trim();
+  if (!name) return;
+  const folders = getFolders();
+  if (folders.find(f => f.name.toLowerCase() === name.toLowerCase())) { toast('Folder already exists.','err'); return; }
+  folders.push({ id: 'f_' + Date.now(), name });
+  saveFolders(folders);
+  closeMiniModals();
+  renderFolderBar();
+  toast(`Folder "${name}" created ✓`, 'ok');
+}
+
+function deleteFolder(folderId) {
+  saveFolders(getFolders().filter(f => f.id !== folderId));
+  allFiles = allFiles.map(f => f.folderId === folderId ? { ...f, folderId: null } : f);
+  syncFolderAssignments();
+  if (currentFolderId === folderId) setView('all');
+  else renderFolderBar();
+}
+
+function showMoveMenu(fileId, e) {
+  e.stopPropagation();
+  const folders = getFolders();
+  if (!folders.length) { toast('Create a folder first.', 'info'); return; }
+  const old = document.getElementById('ctx-menu');
+  if (old) old.remove();
+
+  const menu = document.createElement('div');
+  menu.id = 'ctx-menu';
+  menu.style.cssText = `position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:6px;z-index:400;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,0.5);`;
+  menu.style.left = Math.min(e.clientX, window.innerWidth  - 175) + 'px';
+  menu.style.top  = Math.min(e.clientY, window.innerHeight - (folders.length * 36 + 60)) + 'px';
+
+  folders.forEach(folder => {
+    const item = document.createElement('div');
+    item.style.cssText = 'padding:8px 12px;border-radius:7px;cursor:pointer;font-size:13px;';
+    item.innerHTML = `📁 ${folder.name}`;
+    item.onmouseenter = () => item.style.background = 'rgba(255,255,255,0.06)';
+    item.onmouseleave = () => item.style.background = '';
+    item.onclick = () => { moveFile(fileId, folder.id, folder.name); menu.remove(); };
+    menu.appendChild(item);
+  });
+
+  const removeItem = document.createElement('div');
+  removeItem.style.cssText = 'padding:8px 12px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--muted);border-top:1px solid var(--border);margin-top:4px;';
+  removeItem.innerHTML = '✕ Remove from folder';
+  removeItem.onmouseenter = () => removeItem.style.background = 'rgba(255,255,255,0.04)';
+  removeItem.onmouseleave = () => removeItem.style.background = '';
+  removeItem.onclick = () => { moveFile(fileId, null, null); menu.remove(); };
+  menu.appendChild(removeItem);
+
+  document.body.appendChild(menu);
+  setTimeout(() => document.addEventListener('click', () => menu.remove(), { once:true }), 10);
+}
+
+function moveFile(fileId, folderId, folderName) {
+  allFiles = allFiles.map(f => f._id === fileId ? { ...f, folderId } : f);
+  syncFolderAssignments();
+  renderFolderBar();
+  visibleFiles = visibleFiles.map(f => f._id === fileId ? { ...f, folderId } : f);
+  renderFiles(visibleFiles);
+  toast(folderId ? `Moved to "${folderName}" ✓` : 'Removed from folder ✓', 'ok');
+}
+
+function loadFolderAssignments() {
+  const raw = localStorage.getItem('storedge_file_folders_' + getUserId());
+  if (!raw) return;
+  const map = JSON.parse(raw);
+  allFiles = allFiles.map(f => ({ ...f, folderId: map[f._id] || null }));
+}
+
+function syncFolderAssignments() {
+  const map = {};
+  allFiles.forEach(f => { if (f.folderId) map[f._id] = f.folderId; });
+  localStorage.setItem('storedge_file_folders_' + getUserId(), JSON.stringify(map));
+}
+
+// ════════════════════════════════════════
+//  MINI MODAL HELPERS
+// ════════════════════════════════════════
+function openMiniModal(id) {
+  document.getElementById('mini-backdrop').classList.add('open');
+  document.getElementById(id).classList.add('open');
+}
+function closeMiniModals() {
+  document.getElementById('mini-backdrop').classList.remove('open');
+  document.querySelectorAll('.mini-modal').forEach(m => m.classList.remove('open'));
+}
+
+// ════════════════════════════════════════
+//  UPLOAD
+// ════════════════════════════════════════
 async function uploadFile(file) {
-  const MAX = 100 * 1024 * 1024;
-  if (file.size > MAX) { toast(`${file.name} exceeds 100 MB limit.`, 'err'); return; }
-
-  // Show progress bar
-  const prog  = document.getElementById('upload-progress');
-  const bar   = document.getElementById('up-bar');
-  const uname = document.getElementById('up-name');
+  if (file.size > 100 * 1024 * 1024) { toast(`${file.name} exceeds 100 MB.`, 'err'); return; }
+  const prog = document.getElementById('upload-progress');
+  const bar  = document.getElementById('up-bar');
+  document.getElementById('up-name').textContent = file.name;
   prog.style.display = 'block';
-  uname.textContent  = file.name;
-  bar.style.width    = '10%';
+  bar.style.width = '10%';
 
-  const formData = new FormData();
-  formData.append('file', file);
-
+  const form = new FormData();
+  form.append('file', file);
   try {
     bar.style.width = '40%';
     const res = await fetch(`${API_URL}/api/files/upload`, {
-      method: 'POST',
-      headers: { Authorization: token },
-      body: formData
+      method:'POST', headers:{ Authorization: token }, body: form
     });
     bar.style.width = '90%';
-
     if (res.status === 401) { logout(); return; }
     const data = await res.json();
-
-    if (!res.ok) {
-      toast(data.error || `Failed to upload ${file.name}`, 'err');
-      return;
-    }
-
+    if (!res.ok) { toast(data.error || `Failed to upload ${file.name}`, 'err'); return; }
     bar.style.width = '100%';
     toast(`${file.name} uploaded ✓`, 'ok');
-    setTimeout(() => { prog.style.display = 'none'; bar.style.width = '0%'; }, 800);
-
-    loadFiles();
-    loadUser();
+    setTimeout(() => { prog.style.display='none'; bar.style.width='0%'; }, 800);
+    loadFiles(); loadUser();
   } catch {
-    toast(`Upload failed for ${file.name}. Check connection.`, 'err');
+    toast(`Upload failed for ${file.name}.`, 'err');
     prog.style.display = 'none';
   }
 }
@@ -807,17 +1098,20 @@ function handleFileSelect(e) {
   e.target.value = '';
 }
 
-// ── DRAG & DROP ──────────────────────────────────────────
+// Drag & drop
 const zone = document.getElementById('drop-zone');
 zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag'); });
 zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
 zone.addEventListener('drop', e => {
-  e.preventDefault();
-  zone.classList.remove('drag');
+  e.preventDefault(); zone.classList.remove('drag');
   Array.from(e.dataTransfer.files).forEach(uploadFile);
 });
 
-// ── INIT ─────────────────────────────────────────────────
+// ════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════
+document.getElementById('sort-select').value = sortMode;
+setViewMode(viewMode);
 loadUser();
 loadFiles();
 </script>
